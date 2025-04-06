@@ -1,14 +1,6 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-    <script src="{% static 'js/main.js' %}"></script>
-    <title>Барбершоп "ЦирюльникЪ"</title>
-</head>
-<body>
+{% block content %}
     <h1>Приветствуем Вас в нашем Барбершопе!</h1>
     <p>
         <a href={% url 'orders_list' %}>Список заявок</a>
@@ -16,5 +8,4 @@
     <p>
         <a href={% url 'thanks' %}>Благодарность</a>
     </p>
-</body>
-</html>
+{% endblock content %}

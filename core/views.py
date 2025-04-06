@@ -4,14 +4,21 @@ from .data import *
 
 # Create your views here.
 def landing(request):
-    return render(request, 'landing.html')
+    context = {
+        'menu_items': MENU_ITEMS,
+    }
+    return render(request, 'landing.html', context)
 
 def thanks(request):
-    return render(request, 'core/thanks.html')
+    context = {
+        'menu_items': MENU_ITEMS,
+    }
+    return render(request, 'core/thanks.html', context)
 
 def orders_list(request):
     context = {
-        'orders': orders
+        'orders': orders,
+        'menu_items': MENU_ITEMS,
     }
     return render(request, 'core/orders_list.html', context)
 
@@ -23,6 +30,7 @@ def order_detail(request, order_id):
         return HttpResponse(status=404)
 
     context = {
-        "order": order
+        "order": order,
+        'menu_items': MENU_ITEMS,
     }
     return render(request, 'core/order_detail.html', context)
