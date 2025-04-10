@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .data import *
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def landing(request):
     context = {
-        'menu_items': MENU_ITEMS,
+        'services': services,
+        'masters': masters,
     }
     return render(request, 'core/landing.html', context)
 
@@ -15,6 +17,7 @@ def thanks(request):
     }
     return render(request, 'core/thanks.html', context)
 
+# @login_required
 def orders_list(request):
     context = {
         'orders': orders,

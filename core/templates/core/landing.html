@@ -1,11 +1,74 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <h1>Приветствуем Вас в нашем Барбершопе!</h1>
-    <p>
-        <a href={% url 'orders_list' %}>Список заявок</a>
-    </p>
-    <p>
-        <a href={% url 'thanks' %}>Благодарность</a>
-    </p>
+<div class="landing-page">
+    <!-- О нас -->
+    <section id="about" class="py-5">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="mb-4">О нас</h2>
+                <p class="lead">Друзья! "ЦирюльникЪ" приветствует Вас в лучшем барбершопе (*по версии наших клиентов)</p>
+                <p>Наш барбершоп предлагает качественные стрижки для настоящих мужчин. Мы стрижём с душой и мастерством, вдохновляем на стильные перемены.</p>
+                <div class="mt-4">
+                    <p>У нас есть всё, что нужно, чтобы выглядеть наилучшим образом:</p>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-check-circle-fill text-warning me-2"></i>
+                        <span>Профессиональные опытные мастера</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-check-circle-fill text-warning me-2"></i>
+                        <span>Быстрое обслуживание</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill text-warning me-2"></i>
+                        <span>Доступные цены</span>
+                    </div>
+                </div>
+                <p>Приходите и убедитесь сами, почему все так любят наш барбершоп!</p>
+            </div>
+            <div class="col-md-6">
+                <img src="{% static 'images/barber.webp' %}" alt="О нас" class="img-fluid rounded shadow mt-4">
+            </div>
+        </div>
+    </section>
+
+    <!-- Услуги -->
+    <section id="services" class="py-5">
+        <h2 class="text-center mb-5">Наши услуги</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for service in services %}
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ service }}</h5>
+                        <p class="card-text text-muted">
+                            Безупречный стиль, профессиональный подход
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Мастера -->
+    <section id="masters" class="py-5">
+        <h2 class="text-center mb-5">Наши мастера</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for master in masters %}
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ master.name }}</h5>
+                        <p class="card-text">Опыт работы более 5 лет!</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    
+
+</div>
+
 {% endblock content %}
