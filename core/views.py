@@ -7,7 +7,7 @@ def landing(request):
     context = {
         'menu_items': MENU_ITEMS,
     }
-    return render(request, 'landing.html', context)
+    return render(request, 'core/landing.html', context)
 
 def thanks(request):
     context = {

@@ -1,0 +1,19 @@
+.yellow-status {
+    color: #cdcd16f1;
+    font-weight: bold;
+}
+.red-status {
+    color: #ff0000;
+    font-weight: bold;
+}
+.green-status {
+    color: #008000;
+    font-weight: bold;
+}
+.blue-status {
+    color: #2525e0db;
+    font-weight: bold;
+}
+.card {
+    border-radius: 35px;
+}

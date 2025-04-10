@@ -1,0 +1,31 @@
+{% comment %}orders_list card include{% endcomment %}
+{% load my_extras %}
+<div class="col-12 col-md-6 col-lg-4 mb-4">
+    <div class="card h-100">
+        <h5 class="card-title text-center p-2">Заявка №{{order.id}}</h5>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{order.client_name}}</li>
+            <li class="list-group-item">{{order.date}}</li>
+            {% if order.status == "новая" %}
+            <li class="list-group-item text-warning">{{order.status}}</li>
+            {% elif order.status == "подтвержденная" %}
+            <li class="list-group-item text-primary ">{{order.status}}</li>
+            {% elif order.status == "отмененная" %}
+            <li class="list-group-item text-danger">{{order.status}}</li>
+            {% elif order.status == "выполненная" %}
+            <li class="list-group-item text-success">{{order.status}}</li>
+            {% endif %}
+            <li class="list-group-item">Мастер: {{order.master_id|get_master_name}}</li>
+            <li class="list-group-item">
+                <ul>
+                    {% for service in order.services %}
+                        <li>{{service}}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+        <div class="card-footer mt-auto">
+            <a href="{% url 'order_detail' order.id %}" class="btn btn-dark">Подробнее</a>
+        </div>
+    </div>
+</div>
