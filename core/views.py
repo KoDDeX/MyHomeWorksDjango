@@ -17,7 +17,7 @@ def thanks(request):
     }
     return render(request, 'core/thanks.html', context)
 
-# @login_required
+@login_required
 def orders_list(request):
     context = {
         'orders': orders,
@@ -25,6 +25,7 @@ def orders_list(request):
     }
     return render(request, 'core/orders_list.html', context)
 
+@login_required
 def order_detail(request, order_id):
     try:
         order = [o for o in orders if o["id"] == order_id][0]

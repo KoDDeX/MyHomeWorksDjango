@@ -132,4 +132,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Настройка маршрут для авторизации
 LOGIN_URL = '/admin/'
-

@@ -3,7 +3,6 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Переключатель навигации">
             <span class="navbar-toggler-icon"></span>
         </button>
-        {% comment %} Нам надо about services masters booking {% endcomment %}
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <ul class="navbar-nav">
                 {% for item in menu_items %}
@@ -14,23 +13,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Перейти</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                      <li><a class="dropdown-item" href="{% url 'landing' %}#about">О нас</a></li>
-                      <li><a class="dropdown-item" href="{% url 'landing' %}#services">Услуги</a></li>
-                      {% comment %} <li><hr class="dropdown-divider"></li> {% endcomment %}
-                      <li><a class="dropdown-item" href="{% url 'landing' %}#masters">Мастера</a></li>
+                        <li><a class="dropdown-item" href="{% url 'landing' %}#about">О нас</a></li>
+                        <li><a class="dropdown-item" href="{% url 'landing' %}#services">Услуги</a></li>
+                        <li><a class="dropdown-item" href="{% url 'landing' %}#masters">Мастера</a></li>
                     </ul>
-                  </li>
-                {% comment %} <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'landing' %}#about">О нас</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'landing' %}#services">Услуги</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'landing' %}#masters">Мастера</a>
-                </li> {% endcomment %}
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'landing' %}#booking">Запись</a>
                 </li>
             </ul>
         </div>
