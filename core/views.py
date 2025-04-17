@@ -90,3 +90,93 @@ def order_detail(request, order_id):
 #     duration=210,
 #     description="Стрижка наголо",
 # )
+
+# Master.objects.create(
+#     name="Степан 'Секира' Ильич",
+#     photo="masters/ivan.jpg",
+#     phone="+79995556677",
+#     address="ул. Пушкина, д. 1",
+#     experience=5,
+#     is_active=True,
+# )
+
+# Master.objects.create(
+#     name="Юрий 'Фен' Петров",
+#     photo="masters/ivan.jpg",
+#     phone="+79995556677",
+#     address="ул. Ленина, д. 2",
+#     experience=3,
+#     is_active=True,
+# )
+
+# Master.objects.create(
+#     name="Ираклий 'Зодиак' Иванов",
+#     photo="masters/ivan.jpg",
+#     phone="+79995556677",
+#     address="ул. Гагарина, д. 3",
+#     experience=10,
+#     is_active=True,
+# )
+
+# master = Master.objects.get(id=1)
+# service = Service.objects.get(id=1)
+# order = Order.objects.create(
+#     client_name="Иван Иванов",
+#     phone="+79991234567",
+#     comment="Нужно сделать стрижку",
+#     status="not_approved",
+#     appointment_date='2025-10-01 10:00:00',
+#     master=master,
+# )
+# order.services.add(service)
+
+# master = Master.objects.get(id=2)
+# service = Service.objects.get(id=2)
+# order = Order.objects.create(
+#     client_name="Вася Пупкин",
+#     phone="+79997654321",
+#     comment="Очень надо",
+#     status="not_approved",
+#     appointment_date='2025-10-11 10:00:00',
+#     master=master,
+# )
+# order.services.add(service)
+
+# master = Master.objects.get(id=3)
+# service = Service.objects.filter(id__in=[3, 4])
+# order = Order.objects.create(
+#     client_name="Петя Васечкин",
+#     phone="+79997777777",
+#     comment="Подстричся бы",
+#     status="not_approved",
+#     appointment_date='2025-10-21 10:00:00',
+#     master=master,
+# )
+# order.services.add(*service)
+
+# master = Master.objects.get(id=1)
+# review = Review.objects.create(
+#     client_name="Иван Иванов",
+#     text="Отличная работа, рекомендую!",
+#     rating=5,
+#     master=master,
+# )
+# review.save()
+
+# master = Master.objects.get(id=2)
+# review = Review.objects.create(
+#     client_name="Фрося Фролова",
+#     text="Есть над чем поработать!",
+#     rating=4,
+#     master=master,
+# )
+# review.save()
+
+# master = Master.objects.get(id=3)
+# review = Review.objects.create(
+#     client_name="Тимофей Сергеевич",
+#     text="Больше не приду, уже не хочу!",
+#     rating=1,
+#     master=master,
+# )
+# review.save()
