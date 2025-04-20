@@ -35,7 +35,8 @@ def order_detail(request, order_id):
 
     context = {
         "order": order,
-        'menu_items': MENU_ITEMS,
+        "title": f"Заказ №{order_id}",  
+        "menu_items": MENU_ITEMS,
     }
     return render(request, 'core/order_detail.html', context)
 

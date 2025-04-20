@@ -15,14 +15,6 @@
             {% elif order.status == "выполненная" %}
             <li class="list-group-item text-success">{{order.status}}</li>
             {% endif %}
-            <li class="list-group-item">Мастер: {{order.master_id|get_master_name}}</li>
-            <li class="list-group-item">
-                <ul>
-                    {% for service in order.services %}
-                        <li>{{service}}</li>
-                    {% endfor %}
-                </ul>
-            </li>
         </ul>
         <div class="card-footer mt-auto">
             <a href="{% url 'order_detail' order.id %}" class="btn btn-dark">Подробнее</a>
