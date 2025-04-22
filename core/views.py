@@ -2,12 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .data import *
 from django.contrib.auth.decorators import login_required
+from .models import Review, Order, Master, Service
 
 # Create your views here.
 def landing(request):
     context = {
-        'services': services,
-        'masters': masters,
+        'services': Service.objects.all(),
+        'masters': Master.objects.all(),
+        'reviews': Review.objects.all(),
     }
     return render(request, 'core/landing.html', context)
 
@@ -20,7 +22,7 @@ def thanks(request):
 @login_required
 def orders_list(request):
     context = {
-        'orders': orders,
+        'orders': Order.objects.all(),
         'menu_items': MENU_ITEMS,
     }
     return render(request, 'core/orders_list.html', context)

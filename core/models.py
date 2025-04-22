@@ -27,6 +27,13 @@ class Order (models.Model):
     services = models.ManyToManyField("Service", related_name="orders", verbose_name="Услуги")
     appointment_date = models.DateTimeField(verbose_name="Дата и время записи")
 
+    def __str__(self):
+        return f"Заказ {self.id} от {self.client_name}"
+
+    class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+        ordering = ["-date_created"]
 
 class Master (models.Model):
     """

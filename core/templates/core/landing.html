@@ -56,18 +56,29 @@
         <h2 class="text-center mb-5">Наши мастера</h2>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for master in masters %}
-            <div class="col">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">{{ master.name }}</h5>
-                        <p class="card-text">Опыт работы более 5 лет!</p>
+                {% if master.is_active %}
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ master.name }}</h5>
+                                <p class="card-text">Опыт работы более {{ master.experience }} лет!</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                {% endif %}
             {% endfor %}
         </div>
     </section>
     
+    <!-- Отзывы -->
+    <section id="reviews" class="py-5">
+        <h2 class="text-center mb-5">Отзывы о нас</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for review in reviews %}
+                {% include "core/review_card.html" %}                    
+            {% endfor %}
+        </div>
+    </section>
 
 </div>
 

@@ -1,0 +1,11 @@
+<div class="col">
+    <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body text-center">
+            <h5 class="card-title">Отзыв № {{ review.id }}</h5>
+            <p>Оценка: {{ review.rating }}</p>
+            <p class="card-text">{{ review.client_name }}</p>
+            <p class="card-text">{{ review.text }}</p>
+            <p class="card-text">{{ review.created_at|date:"d-m-Y h:i" }}</p>
+        </div>
+    </div>
+</div>
