@@ -4,16 +4,18 @@
     <div class="card h-100">
         <h5 class="card-title text-center p-2">Заявка № {{order.id}}</h5>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{order.client_name}}</li>
-            <li class="list-group-item">{{order.date_created|date:"d-m-Y H:i"}}</li>
-            {% if order.status == "новая" %}
-            <li class="list-group-item text-warning">{{order.status}}</li>
-            {% elif order.status == "подтвержденная" %}
-            <li class="list-group-item text-primary ">{{order.status}}</li>
-            {% elif order.status == "отмененная" %}
-            <li class="list-group-item text-danger">{{order.status}}</li>
-            {% elif order.status == "выполненная" %}
-            <li class="list-group-item text-success">{{order.status}}</li>
+            <li class="list-group-item"><i class="bi bi-person me-1"></i>{{order.client_name}}</li>
+            <li class="list-group-item"><i class="bi bi-telephone me-1"></i>{{order.phone}}</li>
+            <li class="list-group-item"><i class="bi bi-chat me-1"></i>{{order.comment}}</li>
+            <li class="list-group-item text-end">{{order.date_created|date:"d-m-Y H:i"}}</li>
+            {% if order.status == "not_approved" %}
+            <li class="list-group-item text-warning text-end">{{order.get_status_display}}</li>
+            {% elif order.status == "approved" %}
+            <li class="list-group-item text-primary text-end">{{order.get_status_display}}</li>
+            {% elif order.status == "cancelled" %}
+            <li class="list-group-item text-danger text-end">{{order.get_status_display}}</li>
+            {% elif order.status == "completed" %}
+            <li class="list-group-item text-success text-end">{{order.get_status_display}}</li>
             {% endif %}
         </ul>
         <div class="card-footer mt-auto">

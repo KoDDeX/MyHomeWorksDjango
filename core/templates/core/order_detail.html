@@ -2,33 +2,33 @@
 {% load static %}
 {% block content %}
 {% load my_extras %}
-  <div class="col-12 col-md-6 col-lg-4 mb-4">
-      <div class="card h-100">
-          <h5 class="card-title text-center p-2">Заявка №{{order.id}}</h5>
-          <ul class="list-group list-group-flush">
-              <li class="list-group-item">{{order.client_name}}</li>
-              <li class="list-group-item">{{order.date}}</li>
-              {% if order.status == "новая" %}
-              <li class="list-group-item text-warning">{{order.status}}</li>
-              {% elif order.status == "подтвержденная" %}
-              <li class="list-group-item text-primary ">{{order.status}}</li>
-              {% elif order.status == "отмененная" %}
-              <li class="list-group-item text-danger">{{order.status}}</li>
-              {% elif order.status == "выполненная" %}
-              <li class="list-group-item text-success">{{order.status}}</li>
-              {% endif %}
-              <li class="list-group-item">Мастер: {{order.master_id|get_master_name}}</li>
-              <li class="list-group-item">
-                  <ul>
-                      {% for service in order.services %}
-                          <li>{{service}}</li>
-                      {% endfor %}
-                  </ul>
-              </li>
-          </ul>
-          <div class="card-footer mt-auto">
-              <a href="{% url 'orders_list' %}" class="btn btn-dark">В каталог</a>
-          </div>
-      </div>
-  </div>  
+    <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <h5 class="card-title text-center p-2">Заявка №{{order.id}}</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{order.client_name}}</li>
+                <li class="list-group-item">{{order.date_created|date:"d-m-Y H:i"}}</li>
+                {% if order.status == "новая" %}
+                <li class="list-group-item text-warning">{{order.status}}</li>
+                {% elif order.status == "подтвержденная" %}
+                <li class="list-group-item text-primary ">{{order.status}}</li>
+                {% elif order.status == "отмененная" %}
+                <li class="list-group-item text-danger">{{order.status}}</li>
+                {% elif order.status == "выполненная" %}
+                <li class="list-group-item text-success">{{order.status}}</li>
+                {% endif %}
+                <li class="list-group-item">Мастер: {{order.master_id|get_master_name}}</li>
+                <li class="list-group-item">
+                    <ul>
+                        {% for service in order.services.all %}
+                            <li>{{service.name}}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            <div class="card-footer mt-auto">
+                <a href="{% url 'orders_list' %}" class="btn btn-dark">В каталог</a>
+            </div>
+        </div>
+    </div>  
 {% endblock content %}

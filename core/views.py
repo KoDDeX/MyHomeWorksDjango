@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from .data import *
 from django.contrib.auth.decorators import login_required
 from .models import Review, Order, Master, Service
+from django.db.models import Q
 
 # Create your views here.
 def landing(request):
@@ -14,31 +16,44 @@ def landing(request):
     return render(request, 'core/landing.html', context)
 
 def thanks(request):
-    context = {
-        'menu_items': MENU_ITEMS,
-    }
-    return render(request, 'core/thanks.html', context)
+    return render(request, 'core/thanks.html')
 
 @login_required
 def orders_list(request):
+    """
+    Функция для отображения списка заказов. Для привилегированных пользователей
+    """
+    if request.method == "GET":
+        all_orders = Order.objects.select_related("master").prefetch_related("services").all()
+        search_query = request.GET.get('search', None)
+        if search_query:
+            check_boxes = request.GET.getlist('search_in')
+            filters = Q()
+            if "name" in check_boxes:
+                filters |= Q(client_name__icontains=search_query)
+            if "phone" in check_boxes:
+                filters = filters | Q(phone__icontains=search_query)
+            if "comment" in check_boxes:
+                filters |= Q(comment__icontains=search_query)
+            if filters:
+                all_orders = all_orders.filter(filters)
+
+
     context = {
-        'orders': Order.objects.all(),
-        'menu_items': MENU_ITEMS,
+        'orders': all_orders,
     }
     return render(request, 'core/orders_list.html', context)
 
 @login_required
 def order_detail(request, order_id):
-    try:
-        order = [o for o in orders if o["id"] == order_id][0]
-    except IndexError:
-        # Если заказ не найден, возвращаем 404 - данные не найдены
-        return HttpResponse(status=404)
+    """
+    Функция для отображения информации о заказе по его идентификатору.
+    """
+    order = get_object_or_404(Order, id=order_id)
 
     context = {
         "order": order,
         "title": f"Заказ №{order_id}",  
-        "menu_items": MENU_ITEMS,
     }
     return render(request, 'core/order_detail.html', context)
 
