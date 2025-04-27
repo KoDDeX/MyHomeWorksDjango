@@ -35,6 +35,14 @@ class Order (models.Model):
         verbose_name_plural = "Заказы"
         ordering = ["-date_created"]
 
+        # Индексы для ускорения поиска
+        indexes = [
+            models.Index(fields=["client_name"]),
+            models.Index(fields=["phone"]),
+            models.Index(fields=["comment"]),
+            models.Index(fields=["client_name", "phone", "comment"], name="name_phone_comment_index"),
+        ]
+
 class Master (models.Model):
     """
     Модель для хранения информации о мастерах барбершопа.
