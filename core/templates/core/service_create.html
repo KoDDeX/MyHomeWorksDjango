@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Создание услуги</h1>
+    <form method="post">
+        {% csrf_token %} 
+        <div class="card bg-white">
+            <input class="form-control" type="text" name="name" placeholder="Название услуги" required>
+            <textarea class="form-control" name="description" placeholder="Описание услуги" required></textarea>
+            <input class="form-control" type="number" name="price" placeholder="Цена услуги, руб." step="0.01" required>
+            <button class="btn btn-dark mt-auto" type="submit">Создать</button>
+        </div>
+    </form>
+{% endblock %}
