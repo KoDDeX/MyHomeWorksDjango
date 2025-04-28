@@ -7,6 +7,11 @@
             <input class="form-control" type="text" name="name" placeholder="Название услуги" required>
             <textarea class="form-control" name="description" placeholder="Описание услуги" required></textarea>
             <input class="form-control" type="number" name="price" placeholder="Цена услуги, руб." step="0.01" required>
+            <input class="form-control" type="number" name="duration" placeholder="Длительность, мин.">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="is_popular">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Популярная услуга</label>
+            </div>            
             <button class="btn btn-dark mt-auto" type="submit">Создать</button>
         </div>
     </form>

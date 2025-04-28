@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from .data import *
@@ -68,10 +68,27 @@ def service_create(request):
         }
         return render(request, 'core/service_create.html', context)
     elif request.method == "POST":
-        pass
-        # client_name = request.POST.get("client_name")
-        # phone = request.POST.get("phone")
-        # comment = request.POST.get("comment")
-        # appointment_date = request.POST.get("appointment_date")
-        # master_id = request.POST.get("master")
-        # service_ids = request.POST.getlist("service")
+        name = request.POST.get("name")
+        price = request.POST.get("price")
+        description = request.POST.get("description")
+        duration = request.POST.get("duration")
+        is_popular = request.POST.get("is_popular")
+
+        if name and price and description:
+            new_service = Service.objects.create(
+                name=name,
+                price=price,
+                description=description,
+            )
+            if is_popular:
+                new_service.is_popular = True
+                new_service.save()
+            if duration:
+                new_service.duration = duration
+                new_service.save()
+            return redirect("landing")
+        
+        else:
+            # Если данные не введены, возвращаем ошибку
+            return HttpResponse("Ошибка: все поля должны быть заполнены!")
+
