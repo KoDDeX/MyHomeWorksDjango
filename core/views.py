@@ -5,6 +5,7 @@ from .data import *
 from django.contrib.auth.decorators import login_required
 from .models import Review, Order, Master, Service
 from django.db.models import Q
+from .forms import ReviewForm
 
 # Create your views here.
 def landing(request):
@@ -91,4 +92,19 @@ def service_create(request):
         else:
             # Если данные не введены, возвращаем ошибку
             return HttpResponse("Ошибка: все поля должны быть заполнены!")
+
+def review_create(request):
+
+    if request.method == "GET":
+        form = ReviewForm()
+        context = {
+            "title": "Создание отзыва",
+            "form": form,
+        }
+        return render(request, "core/review_form.html", context)
+
+    elif request.method == "POST":
+        form = ReviewForm(request.POST, request.FILES)
+
+        # if form.is_valid():
 

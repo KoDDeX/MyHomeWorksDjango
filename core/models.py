@@ -84,4 +84,4 @@ class Review (models.Model):
     photo= models.ImageField (upload_to="reviews/", blank=True, null=True, verbose_name="Фотография")
     created_at= models.DateTimeField (auto_now_add=True, verbose_name="Дата создания")
     rating= models.PositiveSmallIntegerField (validators=[MinValueValidator(1), MaxValueValidator(5)], verbose_name="Оценка")
-    is_published= models.BooleanField (default=True, verbose_name="Опубликован")
+    is_published= models.BooleanField (default=False, verbose_name="Опубликован")

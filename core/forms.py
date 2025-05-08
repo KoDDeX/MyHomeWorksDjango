@@ -3,7 +3,7 @@ from .models import Review, Master
 
 class ReviewForm(forms.ModelForm):
 
-    master = forms.ModelChoiceField(quertset = Master.objects.all())
+    master = forms.ModelChoiceField(queryset = Master.objects.all())
 
     class Meta:
         model = Review
