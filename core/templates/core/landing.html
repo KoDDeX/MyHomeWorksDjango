@@ -76,7 +76,9 @@
         <h2 class="text-center mb-5">Отзывы о нас</h2>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for review in reviews %}
-                {% include "core/review_card.html" %}                    
+                {% if review.is_published %}
+                    {% include "core/review_card.html" %} 
+                {% endif %}
             {% endfor %}
         </div>
     </section>

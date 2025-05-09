@@ -88,3 +88,6 @@ class Review (models.Model):
     created_at= models.DateTimeField (auto_now_add=True, verbose_name="Дата создания")
     rating= models.PositiveSmallIntegerField (validators=[MinValueValidator(1), MaxValueValidator(5)], verbose_name="Оценка")
     is_published= models.BooleanField (default=False, verbose_name="Опубликован")
+
+    def __str__(self):
+        return f"Отзыв {self.id} [{self.client_name} от {self.created_at.strftime('%d/%m/%Y')}]"

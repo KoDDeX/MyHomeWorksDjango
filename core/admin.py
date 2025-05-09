@@ -5,4 +5,7 @@ from .models import Order, Service, Master, Review
 admin.site.register(Order)
 admin.site.register(Service)
 admin.site.register(Master)
-admin.site.register(Review)
+
+class ReviewAdmin(admin.ModelAdmin):
+    list_filter = ('client_name', 'master', 'created_at')
+admin.site.register(Review, ReviewAdmin)
