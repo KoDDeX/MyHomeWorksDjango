@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    {% comment %} {{title}} {% endcomment %}
+{% endblock title %}
+{% block content %}
+<div class="row justify-content-center mb-5">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h3 class="card-title mb-0">{{title}}</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% comment %} Имя клиента {% endcomment %}
+                    <div class="mb-3">
+                        <label for="{{ form.client_name.id_for_label }}" class="form-label">{{ form.client_name.label }}</label>
+                        {{ form.client_name }}
+                    </div>
+                    {% comment %} Отзыв {% endcomment %}
+                    <div class="mb-3">
+                        <label for="{{ form.text.id_for_label }}" class="form-label">{{ form.text.label }}</label>
+                        {{ form.text }}
+                    </div>
+                    {% comment %} Рейтинг {% endcomment %}
+                    <div class="col-md-6">
+                        <div class="rating-card p-4">
+                            <div class="star-rating animated-stars">
+                                <input type="radio" id="star5" name="rating" value="5">
+                                <label for="star5" class="bi bi-star-fill"></label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4" class="bi bi-star-fill"></label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3" class="bi bi-star-fill"></label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2" class="bi bi-star-fill"></label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1" class="bi bi-star-fill"></label>
+                            </div>
+                            <p class="text-muted mt-2">Выберите оценку</p>
+                        </div>
+                    </div>
+                    {% comment %} Мастер {% endcomment %}
+                    <div class="mb-3">
+                        <label for="{{ form.master.id_for_label }}" class="form-label">{{ form.master.label }}</label>
+                        {{ form.master }}
+                    </div>
+                    {% comment %} Фото {% endcomment %}
+                    <div class="mb-4">
+                        <label for="{{ form.photo.id_for_label }}" class="form-label">{{ form.photo.label }}</label>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                {{ form.photo }}
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} Набор кнопок {% endcomment %}
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-dark" type="submit">Сохранить</button>
+                        <a href="{% url 'landing' %}" class="btn btn-outline-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .star-rating {
+        direction: rtl;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        color: #ddd;
+        font-size: 24px;
+        padding: 0 2px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover~label,
+    .star-rating input:checked~label {
+        color: #ffc107;
+    }
+</style>
+<script>
+    document.querySelectorAll('.star-rating:not(.readonly) label').forEach(star => {
+        star.addEventListener('click', function() {
+            this.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+        });
+    });
+</script>
+{% endblock content %}

@@ -105,6 +105,11 @@ def review_create(request):
 
     elif request.method == "POST":
         form = ReviewForm(request.POST, request.FILES)
-
-        # if form.is_valid():
-
+        if form.is_valid():
+            form.save()
+            master = form.cleaned_data.get('master')
+            context = {
+                "title": "Благодарность",
+                "thanks_text": f"Ваш отзыв о {master} принят к рассмотрению."
+            }
+            return render(request,"thanks", context)
