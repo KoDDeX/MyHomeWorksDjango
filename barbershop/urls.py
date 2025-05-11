@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.landing, name='landing'),
     path('barbershop/', include('core.urls')),
+    path('api/master-info/', views.get_master_info, name='get_master_info'),
 ]
