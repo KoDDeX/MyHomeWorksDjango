@@ -108,6 +108,12 @@ def review_create(request):
         if form.is_valid():
             form.save()
             return redirect("thanks")
+        else:
+            context = {
+                "title": "Создание отзыва",
+                "form": form,
+            }
+            return render(request, "core/review_form.html", context)
 
 def get_master_info(request):
     """
