@@ -38,10 +38,10 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for service in services %}
             <div class="col">
-                <div class="card h-100 border-0 shadow-sm">
+                <div class="card h-100 border-0 shadow-sm bg-dark text-light">
                     <div class="card-body">
                         <h5 class="card-title">{{ service.name }}</h5>
-                        <p class="card-text text-muted">{{ service.description}}</p>
+                        <p class="card-text fst-italic">{{ service.description}}</p>
                         {% if service.is_popular %}
                             <i class="bi bi-fire">Популярно</i>
                         {% endif %}
@@ -59,7 +59,7 @@
             {% for master in masters %}
                 {% if master.is_active %}
                     <div class="col">
-                        <div class="card h-100 border-0 shadow-sm">
+                        <div class="card h-100 border-0 shadow-sm bg-dark text-light">
                             <div class="card-body text-center">
                                 <h5 class="card-title">{{ master.name }}</h5>
                                 <p class="card-text">Опыт работы более {{ master.experience }} лет!</p>
@@ -84,5 +84,8 @@
     </section>
 
 </div>
-
 {% endblock content %}
+{% block footer %}
+    <p class="mb-0">© 2023 Барбершоп "ЦирюльникЪ". Все права защищены.</p>
+    <p>Разработано с любовью к стилю и качеству.</p>
+{% endblock footer %}
