@@ -7,9 +7,13 @@
             <ul class="navbar-nav">
                 {% for item in menu_items %}
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url item.url_name %}">{{ item.name }}</a>
-                {% endfor %}
+                    {% if item.url_name == 'orders_list' %}
+                        <a class="nav-link active" aria-current="page" href="{% url 'login' %}?next={% url 'orders_list' %}">{{ item.name }}</a>
+                    {% else %}
+                        <a class="nav-link active" aria-current="page" href="{% url item.url_name %}">{{ item.name }}</a>
+                    {% endif %}
                 </li>
+                {% endfor %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Перейти</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
@@ -20,5 +24,26 @@
                 </li>
             </ul>
         </div>
+      <!-- Блок авторизации пользователя -->
+      <div class="navbar-nav">
+        {% if user.is_authenticated %}
+          {% if user.is_superuser %}
+            <a href="/admin/" class="nav-item nav-link">{{ user.username }}</a>
+          {% else %}
+            <span class="nav-item nav-link">{{ user.username }}</span>
+          {% endif %}
+          <form method="post" action="{% url 'logout' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link nav-item nav-link ms-2 p-0" title="Выйти" style="vertical-align: middle;">
+              <i class="bi bi-box-arrow-right"></i>
+            </button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}?next=/" class="nav-link">
+            <i class="bi bi-box-arrow-in-right" title="Вход"></i>
+          </a>
+        {% endif %}
+      </div>
+
     </div>
 </nav>

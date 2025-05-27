@@ -74,6 +74,8 @@ class Service (models.Model):
     is_popular = models.BooleanField (verbose_name="Популярная услуга", default=False)
     image = models.ImageField (upload_to="services/", verbose_name="Изображение", blank=True)
 
+    def __str__(self):
+        return f"{self.name} - {self.price} руб."
 
 class Review (models.Model):
     """
