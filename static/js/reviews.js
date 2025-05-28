@@ -1,5 +1,5 @@
 document.querySelectorAll('.star-rating:not(.readonly) label').forEach(star => {
-    star.addEventListener('click', function() {
+    star.addEventListener('click', function () {
         const rating = this.getAttribute('data-rating');
         this.style.transform = 'scale(1.2)';
         setTimeout(() => {
@@ -9,7 +9,7 @@ document.querySelectorAll('.star-rating:not(.readonly) label').forEach(star => {
     });
 });
 
-document.getElementById('id_master').addEventListener('change', function() {
+document.getElementById('id_master').addEventListener('change', function () {
     const masterId = this.value;
     if (masterId) {
         fetch(`/api/master-info/?master_id=${masterId}`, {
@@ -17,33 +17,33 @@ document.getElementById('id_master').addEventListener('change', function() {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                displayMasterInfo(data.master);
-            } else {
-                console.error('Ошибка:', data.error);
-            }
-        })
-        .catch(error => console.error('Ошибка загрузки данных:', error));
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayMasterInfo(data.master);
+                } else {
+                    console.error('Ошибка:', data.error);
+                }
+            })
+            .catch(error => console.error('Ошибка загрузки данных:', error));
     }
     else {
         const infoDiv = document.getElementById('master-info');
         infoDiv.innerHTML = '';
     }
 });
-    
+
 function displayMasterInfo(master) {
     const infoDiv = document.getElementById('master-info');
     if (!infoDiv) return;
-    
+
     // Очищаем предыдущую информацию
     infoDiv.innerHTML = '';
-    
+
     // Создаем элементы с информацией о мастере
     const card = document.createElement('div');
     card.className = 'card mt-3';
-    
+
     // Добавляем фото, если оно есть
     if (master.photo) {
         const img = document.createElement('img');
@@ -52,29 +52,29 @@ function displayMasterInfo(master) {
         img.alt = master.name;
         card.appendChild(img);
     }
-    
+
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';
-    
+
     const title = document.createElement('h5');
     title.className = 'card-title';
     title.textContent = master.name;
-    
+
     const experience = document.createElement('p');
     experience.className = 'card-text';
     experience.textContent = `Опыт работы: ${master.experience} лет`;
-    
+
     cardBody.appendChild(title);
     cardBody.appendChild(experience);
     card.appendChild(cardBody);
-    
+
     infoDiv.appendChild(card);
 };
 
 // Основная функция валидации формы
 function validateReviewForm() {
     let isValid = true;
-    
+
     // Проверка имени клиента
     const nameField = document.getElementById('id_client_name');
     if (!nameField.value.trim()) {
@@ -83,7 +83,7 @@ function validateReviewForm() {
     } else {
         clearError(nameField);
     }
-    
+
     // Проверка текста отзыва
     const textField = document.getElementById('id_text');
     if (!textField.value.trim()) {
@@ -92,17 +92,23 @@ function validateReviewForm() {
     } else {
         clearError(textField);
     }
-    
+
     // Проверка рейтинга
-    const ratingField = document.getElementsByName('rating');
-    console.log('Рейтинг ' + ratingField.value)
-    if (!ratingField.value) {
+    let ratingChecked = false;
+    const ratingFields = document.getElementsByName('rating');
+    for (let i = 0; i < ratingFields.length; i++) {
+        if (ratingFields[i].checked) {
+            ratingChecked = true;
+            break;
+        }
+    }
+    if (!ratingChecked) {
         showError(document.querySelector('.star-rating'), 'Пожалуйста, поставьте оценку');
         isValid = false;
     } else {
         clearError(document.querySelector('.star-rating'));
     }
-    
+
     // Проверка выбора мастера
     const masterField = document.getElementById('id_master');
     if (!masterField.value) {
@@ -111,7 +117,7 @@ function validateReviewForm() {
     } else {
         clearError(masterField);
     }
-    
+
     return isValid;
 }
 
@@ -119,15 +125,15 @@ function validateReviewForm() {
 function showError(element, message) {
     // Очищаем предыдущую ошибку
     clearError(element);
-    
+
     // Создаем элемент с сообщением об ошибке
     const errorDiv = document.createElement('div');
     errorDiv.className = 'invalid-feedback';
     errorDiv.textContent = message;
-    
+
     // Добавляем класс is-invalid к элементу
     element.classList.add('is-invalid');
-    
+
     // Вставляем сообщение об ошибке после элемента
     element.parentNode.appendChild(errorDiv);
 }
@@ -135,7 +141,7 @@ function showError(element, message) {
 function clearError(element) {
     // Удаляем класс is-invalid
     element.classList.remove('is-invalid');
-    
+
     // Находим и удаляем сообщение об ошибке
     const errorDiv = element.parentNode.querySelector('.invalid-feedback');
     if (errorDiv) {
@@ -144,7 +150,7 @@ function clearError(element) {
 }
 
 // Подключение валидации к форме
-document.getElementById('review-form').addEventListener('submit', function(event) {
+document.getElementById('review-form').addEventListener('submit', function (event) {
     console.log('nazhali submit')
     event.preventDefault();
     if (validateReviewForm()) {

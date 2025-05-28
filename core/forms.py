@@ -1,13 +1,15 @@
 from django import forms
 from .models import Review, Master, Order
 
+
 class ReviewForm(forms.ModelForm):
 
-    master = forms.ModelChoiceField(queryset = Master.objects.all())
+    master = forms.ModelChoiceField(queryset=Master.objects.all())
 
     class Meta:
         model = Review
-        fields = ['client_name', 'text', 'rating', 'master', 'photo']
+        exclude = ["is_published"]
+
 
 class OrderForm(forms.ModelForm):
 
@@ -16,7 +18,6 @@ class OrderForm(forms.ModelForm):
         # Добавляем класс form-control к каждому полю формы
         for field_name, field in self.fields.items():
             field.widget.attrs.update({"class": "form-control"})
-
 
     class Meta:
         model = Order

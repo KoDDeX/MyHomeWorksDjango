@@ -38,12 +38,12 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for service in services %}
             <div class="col">
-                <div class="card h-100 border-0 shadow-sm bg-dark text-light">
+                <div class="card h-100 border-0 shadow-lg bg-light text-dark">
                     <div class="card-body">
                         <h5 class="card-title">{{ service.name }}</h5>
                         <p class="card-text fst-italic">{{ service.description}}</p>
                         {% if service.is_popular %}
-                            <i class="bi bi-fire">Популярно</i>
+                            <i class="bi bi-fire text-danger">Популярно</i>
                         {% endif %}
                     </div>
                 </div>
@@ -59,7 +59,7 @@
             {% for master in masters %}
                 {% if master.is_active %}
                     <div class="col">
-                        <div class="card h-100 border-0 shadow-sm bg-dark text-light">
+                        <div class="card h-100 border-0 shadow-lg bg-light text-dark">
                             <div class="card-body text-center">
                                 <h5 class="card-title">{{ master.name }}</h5>
                                 <p class="card-text">Опыт работы более {{ master.experience }} лет!</p>
@@ -77,7 +77,17 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for review in reviews %}
                 {% if review.is_published %}
-                    {% include "core/review_card.html" %} 
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-lg bg-light text-dark">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Отзыв № {{ review.id }}</h5>
+                                <p>Оценка: {{ review.rating }}</p>
+                                <p class="card-text">{{ review.client_name }}</p>
+                                <p class="card-text">{{ review.text }}</p>
+                                <p class="card-text">{{ review.created_at|date:"d-m-Y h:i" }}</p>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>
