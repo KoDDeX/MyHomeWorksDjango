@@ -4,4 +4,6 @@ db.sqlite3
 *__pycache__
 .env
 GitHub.txt
-*.JPG
+media/images/services/*
+media/*
+README.md
