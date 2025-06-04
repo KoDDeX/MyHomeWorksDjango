@@ -12,10 +12,6 @@ MENU_ITEMS = [
         "url_name": "order_create"
     },
     {
-        "name": "Спасибо",
-        "url_name": "thanks"
-    },
-    {
         "name": "Оставить отзыв",
         "url_name": "review_create"
     }
