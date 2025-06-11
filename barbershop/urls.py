@@ -30,6 +30,7 @@ urlpatterns = [
     path(
         "accounts/", include("django.contrib.auth.urls")
     ),  # Добавлено для поддержки login/logout
+    path("users/", include("users.urls")),  # URL-ы приложения пользователей
 ]
 
 if settings.DEBUG:

@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "debug_toolbar",
     "core",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -154,7 +155,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Настройка маршрут для авторизации
-LOGIN_URL = "/admin/"
+LOGIN_URL = "user:login"
+LOGIN_REDIRECT_URL = "landing"  # Путь, куда перенаправлять после входа
+LOGOUT_REDIRECT_URL = "landing"  # Путь, куда перенаправлять после выхода
 
 # Настройка для отладки в локальной сети
 INTERNAL_IPS = [
