@@ -2,9 +2,11 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
 
 class UserLoginForm(AuthenticationForm):
+    """
+    Кастомная форма для входа пользователей
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({
@@ -16,7 +18,7 @@ class UserLoginForm(AuthenticationForm):
             'placeholder': 'Пароль'
         })
 
-class UserRegistrationForm(UserCreationForm):
+class UserRegisterForm(UserCreationForm):
     """
     Кастомная форма для регистрации пользователей
     """
@@ -30,7 +32,7 @@ class UserRegistrationForm(UserCreationForm):
     )
     
     class Meta:
-        model = User
+        model = get_user_model()
         # Включаем username и email в форму регистрации
         fields = ("username", "email")
 
@@ -51,7 +53,7 @@ class UserRegistrationForm(UserCreationForm):
 
     def save(self, commit=True):
         """"
-        Переопределяем метод save для добавления логики сохранения email
+        Переопределяем метод save для корректного сохранения поля email
         """
         user = super().save(commit=True)
         user.email = self.cleaned_data['email']

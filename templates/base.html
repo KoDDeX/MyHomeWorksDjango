@@ -20,14 +20,6 @@
     <div class="container pt-5">
         <header>
             {% include "menu.html" %}
-        </header>
-        <main>
-            {% block content %}
-            {% endblock content %}
-        </main>
-    </div>
-    <footer>
-        {% block footer %}
             {% if messages %}
                 <div class="container mt-3">
                     {% for message in messages %}
@@ -43,6 +35,15 @@
                     {% endfor %}
                 </div>
             {% endif %}
+        </header>
+        <main>
+            {% block content %}
+            {% endblock content %}
+        </main>
+    </div>
+    <footer>
+        {% block footer %}
+
         {% endblock footer %}
     </footer>
     {% block scripts %}
