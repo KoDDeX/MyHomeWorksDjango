@@ -13,3 +13,4 @@ python-telegram-bot
 sniffio
 sqlparse
 tzdata
+django-debug-toolbar
