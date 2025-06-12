@@ -155,7 +155,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Настройка маршрут для авторизации
-LOGIN_URL = "user:login"
+LOGIN_URL = "users:login"
 LOGIN_REDIRECT_URL = "landing"  # Путь, куда перенаправлять после входа
 LOGOUT_REDIRECT_URL = "landing"  # Путь, куда перенаправлять после выхода
 
