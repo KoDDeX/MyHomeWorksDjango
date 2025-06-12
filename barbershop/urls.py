@@ -17,20 +17,20 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from core import views
+from core.views import *
 from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.landing, name="landing"),
+    path("", landing, name="landing"),
     path("barbershop/", include("core.urls")),
-    path("api/master-info/", views.get_master_info, name="get_master_info"),
-    path(
-        "accounts/", include("django.contrib.auth.urls")
-    ),  # Добавлено для поддержки login/logout
-    path("users/", include("users.urls")),  # URL-ы приложения пользователей
+    path("api/master-info/", get_master_info, name="get_master_info"),
+    # path(
+    #     "accounts/", include("django.contrib.auth.urls")
+    # ),  # Добавлено для поддержки login/logout
+    path("users/", include("users.urls", namespace="users")),  # URL-ы приложения пользователей
 ]
 
 if settings.DEBUG:
