@@ -35,8 +35,34 @@ class LandingPageView(TemplateView):
         context['reviews'] = Review.objects.all()
         return context
 
-def thanks(request):
-    return render(request, 'core/thanks.html')
+# def thanks(request):
+#     return render(request, 'core/thanks.html')
+
+class ThanksView(TemplateView):
+    """
+    Класс для отображения страницы благодарности после успешного создания отзыва.
+    """
+    template_name = 'core/thanks.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Метод для получения контекста данных, передаваемых в шаблон.
+        Обрабатываем параметр source из URL, если он есть.
+        """
+        context = super().get_context_data(**kwargs)
+        
+        if 'source' in kwargs:
+            source_page = kwargs['source']
+            if source_page == 'review':
+                messages.success(self.request, "Ваш отзыв будет опубликован после модерации!")
+            elif source_page == 'order':
+                messages.success(self.request, "Ваш заказ принят в обработку!")
+            else:
+                messages.info(self.request, "Ваше обращение принято!")
+        else:
+            messages.info(self.request, "С нами удобно!")
+
+        return context
 
 @login_required
 def orders_list(request):
