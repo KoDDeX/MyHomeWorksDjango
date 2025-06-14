@@ -8,7 +8,8 @@ from .models import Review, Order, Master, Service
 from django.db.models import Q
 from .forms import ReviewForm, OrderForm
 import json
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
 # def landing(request):
@@ -64,16 +65,69 @@ class ThanksView(TemplateView):
 
         return context
 
-@login_required
-def orders_list(request):
+# @login_required
+# def orders_list(request):
+#     """
+#     Функция для отображения списка заказов. Для привилегированных пользователей
+#     """
+#     if request.method == "GET":
+#         all_orders = Order.objects.select_related("master").prefetch_related("services").all()
+#         search_query = request.GET.get('search', None)
+#         if search_query:
+#             check_boxes = request.GET.getlist('search_in')
+#             filters = Q()
+#             if "name" in check_boxes:
+#                 filters |= Q(client_name__icontains=search_query)
+#             if "phone" in check_boxes:
+#                 filters = filters | Q(phone__icontains=search_query)
+#             if "comment" in check_boxes:
+#                 filters |= Q(comment__icontains=search_query)
+#             if filters:
+#                 all_orders = all_orders.filter(filters)
+
+
+#     context = {
+#         'orders': all_orders,
+#     }
+#     return render(request, 'core/orders_list.html', context)
+
+
+class StaffRequiredMixin(UserPassesTestMixin):
     """
-    Функция для отображения списка заказов. Для привилегированных пользователей
+    Миксин для проверки, является ли пользователь сотрудником.
     """
-    if request.method == "GET":
-        all_orders = Order.objects.select_related("master").prefetch_related("services").all()
-        search_query = request.GET.get('search', None)
+    def test_func(self):
+        """
+        Метод для проверки, является ли пользователь сотрудником.
+        """
+        if not self.request.user.is_staff:
+            messages.error(self.request, "У вас нет доступа к этой странице.")
+            return False
+        return True
+
+
+class OrderListView(StaffRequiredMixin, ListView):
+    """
+    Класс для отображения списка заказов.
+    Используется для сотрудников, которые могут просматривать все заказы.
+    """
+    model = Order
+    template_name = 'core/orders_list.html'
+    context_object_name = 'orders'
+    paginate_by = 10
+
+    def get_queryset(self):
+        """
+        Переопределяем метод для получения заказов с дополнительными данными.
+        """
+        all_orders = (
+            Order.objects.select_related("master")
+            .prefetch_related("services")
+            .all()
+        )
+        search_query = self.request.GET.get('search', None)
         if search_query:
-            check_boxes = request.GET.getlist('search_in')
+            check_boxes = self.request.GET.getlist('search_in')
             filters = Q()
             if "name" in check_boxes:
                 filters |= Q(client_name__icontains=search_query)
@@ -83,12 +137,8 @@ def orders_list(request):
                 filters |= Q(comment__icontains=search_query)
             if filters:
                 all_orders = all_orders.filter(filters)
+        return all_orders
 
-
-    context = {
-        'orders': all_orders,
-    }
-    return render(request, 'core/orders_list.html', context)
 
 @login_required
 def order_detail(request, order_id):

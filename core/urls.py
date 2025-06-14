@@ -4,7 +4,7 @@ from core.views import *
 
 urlpatterns = [
     path('thanks/<str:source>/', ThanksView.as_view(), name='thanks'),
-    path('orders/', orders_list, name='orders_list'),
+    path('orders/', OrderListView.as_view(), name='orders_list'),
     path('orders/<int:order_id>/', order_detail, name='order_detail'),
     path('services/create/', service_create, name='service_create'),
     path("masters_services/", masters_services_by_id, name="masters_services_by_id_ajax"),
