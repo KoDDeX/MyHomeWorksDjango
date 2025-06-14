@@ -8,15 +8,32 @@ from .models import Review, Order, Master, Service
 from django.db.models import Q
 from .forms import ReviewForm, OrderForm
 import json
+from django.views.generic import TemplateView
 
 # Create your views here.
-def landing(request):
-    context = {
-        'services': Service.objects.all(),
-        'masters': Master.objects.all(),
-        'reviews': Review.objects.all(),
-    }
-    return render(request, 'core/landing.html', context)
+# def landing(request):
+#     context = {
+#         'services': Service.objects.all(),
+#         'masters': Master.objects.all(),
+#         'reviews': Review.objects.all(),
+#     }
+#     return render(request, 'core/landing.html', context)
+
+class LandingPageView(TemplateView):
+    """
+    Класс для отображения главной страницы сайта.
+    """
+    template_name = 'core/landing.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Метод для получения контекста данных, передаваемых в шаблон.
+        """
+        context = super().get_context_data(**kwargs)
+        context['services'] = Service.objects.all()
+        context['masters'] = Master.objects.all()
+        context['reviews'] = Review.objects.all()
+        return context
 
 def thanks(request):
     return render(request, 'core/thanks.html')
