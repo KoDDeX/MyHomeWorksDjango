@@ -8,7 +8,7 @@ from .models import Review, Order, Master, Service
 from django.db.models import Q
 from .forms import ReviewForm, OrderForm
 import json
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
@@ -140,18 +140,35 @@ class OrderListView(StaffRequiredMixin, ListView):
         return all_orders
 
 
-@login_required
-def order_detail(request, order_id):
-    """
-    Функция для отображения информации о заказе по его идентификатору.
-    """
-    order = get_object_or_404(Order, id=order_id)
+# @login_required
+# def order_detail(request, order_id):
+#     """
+#     Функция для отображения информации о заказе по его идентификатору.
+#     """
+#     order = get_object_or_404(Order, id=order_id)
 
-    context = {
-        "order": order,
-        "title": f"Заказ №{order_id}",  
-    }
-    return render(request, 'core/order_detail.html', context)
+#     context = {
+#         "order": order,
+#         "title": f"Заказ №{order_id}",  
+#     }
+#     return render(request, 'core/order_detail.html', context)
+
+
+class OrderDetailView(LoginRequiredMixin, StaffRequiredMixin, DetailView):
+    """
+    Класс для отображения деталей заказа.
+    Используется для сотрудников, которые могут просматривать детали заказов.
+    """
+    model = Order
+    template_name = 'core/order_detail.html'
+    pk_url_kwarg = 'order_id'
+    context_object_name = 'order'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(request, "У вас нет доступа к этой странице.")
+            return redirect('landing')
+        return super().dispatch(request, *args, **kwargs)
 
 @login_required
 def service_create(request):
