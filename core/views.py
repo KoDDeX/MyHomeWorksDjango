@@ -10,7 +10,9 @@ from .forms import ReviewForm, OrderForm
 import json
 from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .forms import ServiceForm, ServiceEasyForm
 
 # Create your views here.
 # def landing(request):
@@ -120,6 +122,37 @@ class ServicesListView(StaffRequiredMixin, ListView):
         'title': 'Управление услугами',
     }
 
+
+class ServiceCreateView(StaffRequiredMixin, CreateView):
+    """
+    Представление для создания новой услуги.
+    Поддерживает два режима формы: обычный (normal) и упрощенный (easy).
+    """
+    form_class = ServiceForm
+    template_name = "core/service_form.html"
+    success_url = reverse_lazy("services_list")
+    extra_context = {
+        "title": "Создание услуги",
+        "button_txt": "Создать",
+    }
+
+    def form_valid(self, form):
+        """Обрабатывает успешное создание услуги, показывает сообщение."""
+        messages.success(self.request, f"Услуга '{form.cleaned_data['name']}' успешно создана!")
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        """Обрабатывает невалидную форму, показывает сообщение об ошибке."""
+        messages.error(self.request, "Ошибка формы: проверьте ввод данных.")
+        return super().form_invalid(form)
+    
+    def get_form_class(self):
+        """Возвращает класс формы в зависимости от параметра form_mode в URL."""
+        form_mode = self.kwargs.get("form_mode")
+        if form_mode == "normal":
+            return ServiceForm
+        elif form_mode == "easy":
+            return ServiceEasyForm
 
 class OrderListView(StaffRequiredMixin, ListView):
     """

@@ -92,6 +92,10 @@ class Service (models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.price} руб."
+    
+    class Meta:
+        verbose_name = "Услуга"
+        verbose_name_plural = "Услуги"
 
 class Review (models.Model):
     """
