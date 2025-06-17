@@ -11,4 +11,5 @@ urlpatterns = [
     path("order_create/", order_create, name="order_create"),
     path('review/create/', review_create, name='review_create'),
     path('masters/<int:master_id>/', MasterDetailView.as_view(), name='master_detail'),
+    path('services/', ServicesListView.as_view(), name='services_list'),
 ]

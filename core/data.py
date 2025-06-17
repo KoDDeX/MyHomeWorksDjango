@@ -8,6 +8,10 @@ MENU_ITEMS = [
         "url_name": "orders_list"
     },
     {
+        "name": "Список услуг",
+        "url_name": "services_list"
+    },
+    {
         "name": "Создать заказ",
         "url_name": "order_create"
     },

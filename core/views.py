@@ -107,6 +107,20 @@ class StaffRequiredMixin(UserPassesTestMixin):
         return True
 
 
+class ServicesListView(StaffRequiredMixin, ListView):
+    """
+    Класс для отображения списка услуг.
+    Используется для отображения всех доступных услуг на главной странице.
+    """
+    model = Service
+    template_name = 'core/services_list.html'
+    context_object_name = 'services'
+    paginate_by = 10
+    extra_context = {
+        'title': 'Управление услугами',
+    }
+
+
 class OrderListView(StaffRequiredMixin, ListView):
     """
     Класс для отображения списка заказов.
