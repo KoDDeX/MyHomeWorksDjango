@@ -63,6 +63,9 @@
                             <div class="card-body text-center">
                                 <h5 class="card-title">{{ master.name }}</h5>
                                 <p class="card-text">Опыт работы более {{ master.experience }} лет!</p>
+                                <!-- Добавим кнопку Подробнее для перехода на страницу мастера-->
+                                <a href="{% url 'master_detail' master.id %}" class="btn btn-dark btn-lg mt-3">
+                                    <i class="bi bi-person-fill me-2"></i>Подробнее</a>
                             </div>
                         </div>
                     </div>

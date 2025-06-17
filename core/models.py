@@ -56,6 +56,22 @@ class Master (models.Model):
     experience = models.PositiveIntegerField(verbose_name="Стаж работы", help_text="Опыт работы в годах")
     services = models.ManyToManyField("Service", related_name="masters", verbose_name="Услуги")
     is_active = models.BooleanField(default=True, verbose_name="Активен")
+    view_count = models.PositiveIntegerField(
+    default=0, verbose_name="Количество просмотров"
+    )   
+
+    def avg_rating(self)-> float:
+        """Вычисляет среднюю оценку мастера на основе опубликованных отзывов"""
+    # Получаем только опубликованные отзывы
+        published_reviews = self.reviews.filter(is_published=True)
+        
+        # Проверяем, есть ли отзывы
+        if published_reviews.exists():
+            # Вычисляем среднее значение и округляем до 1 знака после запятой
+            return round(sum(review.rating for review in published_reviews) / published_reviews.count(), 1)
+        else:
+            # Если отзывов нет, возвращаем 0 или None
+            return 0.0
 
     def __str__(self):
         return f"{self.name}"
@@ -85,8 +101,8 @@ class Review (models.Model):
     """
     text= models.TextField (verbose_name="Текст отзыва")
     client_name= models.CharField (max_length=100, blank=True, verbose_name="Имя клиента")
-    master= models.ForeignKey ("Master", on_delete=models.CASCADE, verbose_name="Мастер")
-    photo= models.ImageField (upload_to="reviews/", blank=True, null=True, verbose_name="Фотография")
+    master= models.ForeignKey ("Master", on_delete=models.CASCADE, related_name="reviews", verbose_name="Мастер")
+    photo= models.ImageField (upload_to="images/reviews/", blank=True, null=True, verbose_name="Фотография")
     created_at= models.DateTimeField (auto_now_add=True, verbose_name="Дата создания")
     rating= models.PositiveSmallIntegerField (validators=[MinValueValidator(1), MaxValueValidator(5)], verbose_name="Оценка")
     is_published= models.BooleanField (default=False, verbose_name="Опубликован")

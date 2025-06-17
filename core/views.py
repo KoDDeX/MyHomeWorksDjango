@@ -5,11 +5,12 @@ from .data import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Review, Order, Master, Service
-from django.db.models import Q
+from django.db.models import Q, F, Prefetch
 from .forms import ReviewForm, OrderForm
 import json
 from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 
 # Create your views here.
 # def landing(request):
@@ -169,6 +170,54 @@ class OrderDetailView(LoginRequiredMixin, StaffRequiredMixin, DetailView):
             messages.error(request, "У вас нет доступа к этой странице.")
             return redirect('landing')
         return super().dispatch(request, *args, **kwargs)
+
+
+class MasterDetailView(DetailView):
+    """
+    Класс для отображения деталей мастера.
+    """
+    model = Master
+    template_name = 'core/master_detail.html'
+    context_object_name = 'master'
+    pk_url_kwarg = 'master_id'
+
+    def get_queryset(self):
+        """
+        Переопределяем метод для получения связанных услуг и опубликованных отзывов
+        """
+        return Master.objects.prefetch_related(
+            'services', 
+            Prefetch('reviews', queryset=Review.objects.filter(is_published=True).order_by('-created_at'))
+        )
+    
+    def get_object(self, queryset=None):
+        """
+        Переопределяем метод для получения объекта и обновления счетчика просмотров
+        """
+        master = super().get_object(queryset)
+
+        master_id = master.id
+        viewed_masters = self.request.session.get('viewed_masters', [])
+
+        if master_id not in viewed_masters:
+            # Увеличиваем счетчик просмотров
+            Master.objects.filter(id=master_id).update(view_count=F('view_count') + 1)
+            viewed_masters.append(master_id)
+            self.request.session['viewed_masters'] = viewed_masters
+
+            master.view_count += 1
+
+        return master
+
+    def get_context_data(self, **kwargs):
+        """
+        Переопределяем метод для добавления дополнительных данных в контекст.
+        """
+        context = super().get_context_data(**kwargs)
+        context['services'] = self.object.services.all()
+        context['reviews'] = self.object.reviews.filter(is_published=True).order_by('-created_at')
+        context['title'] = f"Мастер {self.object.name}"
+        return context
 
 @login_required
 def service_create(request):

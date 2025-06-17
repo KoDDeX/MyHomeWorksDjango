@@ -10,4 +10,5 @@ urlpatterns = [
     path("masters_services/", masters_services_by_id, name="masters_services_by_id_ajax"),
     path("order_create/", order_create, name="order_create"),
     path('review/create/', review_create, name='review_create'),
+    path('masters/<int:master_id>/', MasterDetailView.as_view(), name='master_detail'),
 ]
