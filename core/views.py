@@ -254,12 +254,16 @@ class OrderCreateView(CreateView):
     model = Order
     form_class = OrderForm
     template_name = 'core/order_form.html'
-    # В случае успеха перенаправляем на страницу благодарности с параметром source='order'
-    success_url = reverse_lazy('thanks', kwargs={'source': 'order'})
     extra_context = {
         'title': 'Создание заказа',
         'button_text': 'Создать заказ',
     }
+
+    def get_success_url(self):
+        """
+        Переопределяем метод для получения URL перенаправления после успешного создания заказа.
+        """
+        return reverse_lazy('thanks', kwargs={'source': 'order'})
 
     def form_valid(self, form):
         """
@@ -322,6 +326,50 @@ class MasterDetailView(DetailView):
         context['title'] = f"Мастер {self.object.name}"
         return context
 
+
+class ReviewCreateView(CreateView):
+    """
+    Класс для создания нового отзыва.
+    """
+    model = Review
+    form_class = ReviewForm
+    template_name = 'core/review_form.html'
+    extra_context = {
+        'title': 'Оставить отзыв',
+        'button_text': 'Отправить отзыв',
+    }
+
+    def get_success_url(self):
+        """
+        Переопределяем метод для получения URL перенаправления после успешного создания отзыва.
+        """
+        return reverse_lazy('thanks', kwargs={'source': 'review'})
+    
+    def get_initial(self):
+        """
+        Переопределяем метод для получения начальных данных формы.
+        """
+        initial = super().get_initial()
+        master_id = self.request.GET.get('master_id')
+        if master_id:
+            try:
+                initial['master'] = Master.objects.get(pk=master_id)
+            except Master.DoesNotExist:
+                pass
+        return initial
+
+    def form_valid(self, form):
+        """
+        Обрабатывает успешное создание отзыва, показывает сообщение.
+        Сохраняем отзыв с флагом is_published=False для модерации.
+        """
+        review = form.save(commit=False)
+        review.is_published = False
+        review.save()
+        messages.success(self.request, "Ваш отзыв будет опубликован после модерации!")
+        return redirect(self.get_success_url())
+
+
 # @login_required
 # def service_create(request):
 #     """
@@ -357,27 +405,27 @@ class MasterDetailView(DetailView):
 #             # Если данные не введены, возвращаем ошибку
 #             return HttpResponse("Ошибка: все поля должны быть заполнены!")
 
-def review_create(request):
+# def review_create(request):
 
-    if request.method == "GET":
-        form = ReviewForm()
-        context = {
-            "title": "Создание отзыва",
-            "form": form,
-        }
-        return render(request, "core/review_form.html", context)
+#     if request.method == "GET":
+#         form = ReviewForm()
+#         context = {
+#             "title": "Создание отзыва",
+#             "form": form,
+#         }
+#         return render(request, "core/review_form.html", context)
 
-    elif request.method == "POST":
-        form = ReviewForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect("thanks")
-        else:
-            context = {
-                "title": "Создание отзыва",
-                "form": form,
-            }
-            return render(request, "core/review_form.html", context)
+#     elif request.method == "POST":
+#         form = ReviewForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("thanks")
+#         else:
+#             context = {
+#                 "title": "Создание отзыва",
+#                 "form": form,
+#             }
+#             return render(request, "core/review_form.html", context)
 
 def get_master_info(request):
     """
