@@ -247,6 +247,34 @@ class OrderDetailView(LoginRequiredMixin, StaffRequiredMixin, DetailView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class OrderCreateView(CreateView):
+    """
+    Класс для создания нового заказа.
+    """
+    model = Order
+    form_class = OrderForm
+    template_name = 'core/order_form.html'
+    # В случае успеха перенаправляем на страницу благодарности с параметром source='order'
+    success_url = reverse_lazy('thanks', kwargs={'source': 'order'})
+    extra_context = {
+        'title': 'Создание заказа',
+        'button_text': 'Создать заказ',
+    }
+
+    def form_valid(self, form):
+        """
+        Обрабатывает успешное создание заказа, показывает сообщение.
+        """
+        messages.success(self.request, "Ваш заказ успешно создан!")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        """
+        Обрабатывает невалидную форму, показывает сообщение об ошибке.
+        """
+        messages.error(self.request, "Ошибка формы: проверьте ввод данных.")
+        return super().form_invalid(form)
+
 class MasterDetailView(DetailView):
     """
     Класс для отображения деталей мастера.
@@ -408,41 +436,41 @@ def masters_services_by_id(request, master_id=None):
         content_type="application/json",
     )
 
-def order_create(request):
-    """
-    Вью для создания заказа
-    """
-    if request.method == "GET":
-        # Если метод GET - возвращаем пустую форму
-        form = OrderForm()
+# def order_create(request):
+#     """
+#     Вью для создания заказа
+#     """
+#     if request.method == "GET":
+#         # Если метод GET - возвращаем пустую форму
+#         form = OrderForm()
 
-        context = {
-            "title": "Создание заказа",
-            "form": form,
-            "button_text": "Создать",
-        }
-        return render(request, "core/order_form.html", context)
+#         context = {
+#             "title": "Создание заказа",
+#             "form": form,
+#             "button_text": "Создать",
+#         }
+#         return render(request, "core/order_form.html", context)
 
-    if request.method == "POST":
-        # Создаем форму и передаем в нее POST данные
-        form = OrderForm(request.POST)
+#     if request.method == "POST":
+#         # Создаем форму и передаем в нее POST данные
+#         form = OrderForm(request.POST)
 
-        # Если форма валидна:
-        if form.is_valid():
-            # Сохраняем форму в БД
-            form.save()
-            client_name = form.cleaned_data.get("client_name")
-            # Даем пользователю уведомление об успешном создании
-            messages.success(request, f"Заказ для {client_name} успешно создан!")
+#         # Если форма валидна:
+#         if form.is_valid():
+#             # Сохраняем форму в БД
+#             form.save()
+#             client_name = form.cleaned_data.get("client_name")
+#             # Даем пользователю уведомление об успешном создании
+#             messages.success(request, f"Заказ для {client_name} успешно создан!")
 
-            # Перенаправляем на страницу с благодарностью
-            return redirect("thanks")
+#             # Перенаправляем на страницу с благодарностью
+#             return redirect("thanks")
 
-        # В случае ошибок валидации Django автоматически заполнит form.errors
-        # и отобразит их в шаблоне, поэтому просто возвращаем форму
-        context = {
-            "title": "Создание заказа",
-            "form": form,
-            "button_text": "Создать",
-        }
-        return render(request, "core/order_form.html", context)
+#         # В случае ошибок валидации Django автоматически заполнит form.errors
+#         # и отобразит их в шаблоне, поэтому просто возвращаем форму
+#         context = {
+#             "title": "Создание заказа",
+#             "form": form,
+#             "button_text": "Создать",
+#         }
+#         return render(request, "core/order_form.html", context)
