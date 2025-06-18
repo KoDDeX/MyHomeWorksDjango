@@ -13,4 +13,5 @@ urlpatterns = [
     path('masters/<int:master_id>/', MasterDetailView.as_view(), name='master_detail'),
     path('services/', ServicesListView.as_view(), name='services_list'),
     path("service_create/<str:form_mode>/", ServiceCreateView.as_view(), name="service_create"),
+    path("service_update/<int:pk>", ServiceUpdateView.as_view(), name="service_update"),
 ]

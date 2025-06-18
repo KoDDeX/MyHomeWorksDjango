@@ -154,6 +154,34 @@ class ServiceCreateView(StaffRequiredMixin, CreateView):
         elif form_mode == "easy":
             return ServiceEasyForm
 
+
+class ServiceUpdateView(StaffRequiredMixin, UpdateView):
+    """
+    Представление для редактирования существующей услуги.
+    Поддерживает два режима формы: обычный (normal) и упрощенный (easy).
+    """
+    model = Service
+    template_name = "core/service_form.html"
+    form_class = ServiceForm
+    success_url = reverse_lazy("services_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f"Редактирование услуги: {self.object.name}"
+        context['button_txt'] = "Сохранить изменения"
+        return context
+
+    def form_valid(self, form):
+        """Обрабатывает успешное обновление услуги, показывает сообщение."""
+        messages.success(self.request, f"Услуга '{form.cleaned_data['name']}' успешно обновлена!")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        """Обрабатывает невалидную форму, показывает сообщение об ошибке."""
+        messages.error(self.request, "Ошибка формы: проверьте ввод данных.")
+        return super().form_invalid(form)
+
+
 class OrderListView(StaffRequiredMixin, ListView):
     """
     Класс для отображения списка заказов.
@@ -266,40 +294,40 @@ class MasterDetailView(DetailView):
         context['title'] = f"Мастер {self.object.name}"
         return context
 
-@login_required
-def service_create(request):
-    """
-    Функция для создания нового заказа.
-    """
-    if request.method == "GET":
-        context = {
-            "title": "Создание услуги",
-        }
-        return render(request, 'core/service_create.html', context)
-    elif request.method == "POST":
-        name = request.POST.get("name")
-        price = request.POST.get("price")
-        description = request.POST.get("description")
-        duration = request.POST.get("duration")
-        is_popular = request.POST.get("is_popular")
+# @login_required
+# def service_create(request):
+#     """
+#     Функция для создания нового заказа.
+#     """
+#     if request.method == "GET":
+#         context = {
+#             "title": "Создание услуги",
+#         }
+#         return render(request, 'core/service_create.html', context)
+#     elif request.method == "POST":
+#         name = request.POST.get("name")
+#         price = request.POST.get("price")
+#         description = request.POST.get("description")
+#         duration = request.POST.get("duration")
+#         is_popular = request.POST.get("is_popular")
 
-        if name and price and description:
-            new_service = Service.objects.create(
-                name=name,
-                price=price,
-                description=description,
-            )
-            if is_popular:
-                new_service.is_popular = True
-                new_service.save()
-            if duration:
-                new_service.duration = duration
-                new_service.save()
-            return redirect("landing")
+#         if name and price and description:
+#             new_service = Service.objects.create(
+#                 name=name,
+#                 price=price,
+#                 description=description,
+#             )
+#             if is_popular:
+#                 new_service.is_popular = True
+#                 new_service.save()
+#             if duration:
+#                 new_service.duration = duration
+#                 new_service.save()
+#             return redirect("landing")
         
-        else:
-            # Если данные не введены, возвращаем ошибку
-            return HttpResponse("Ошибка: все поля должны быть заполнены!")
+#         else:
+#             # Если данные не введены, возвращаем ошибку
+#             return HttpResponse("Ошибка: все поля должны быть заполнены!")
 
 def review_create(request):
 
