@@ -397,6 +397,36 @@ class MastersServicesAjaxView(View):
         response_data = [{"id": service.id, "name": service.name} for service in services]
         return JsonResponse(response_data, safe=False)
 
+
+class MasterInfoAjaxView(View):
+    """
+    AJAX-представление для получения информации о мастере.
+    Возвращает данные в формате JSON. Требует заголовок X-Requested-With.
+    """
+    def get(self, request, *args, **kwargs):
+        """Обрабатывает GET-запрос, проверяет AJAX-запрос и параметр master_id."""
+        if not request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse({"success": False, "error": "Недопустимый запрос"}, status=400)
+
+        master_id = request.GET.get("master_id")
+        if not master_id:
+            return JsonResponse({"success": False, "error": "Не указан ID мастера"}, status=400)
+
+        try:
+            master = Master.objects.get(pk=master_id)
+            master_data = {
+                "id": master.id,
+                "name": f"{master.name}",
+                "experience": master.experience,
+                "photo": master.photo.url if master.photo else None,
+                "services": list(master.services.values("id", "name", "price")),
+            }
+            return JsonResponse({"success": True, "master": master_data})
+        except Master.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Мастер не найден"}, status=404)
+
+
+
 # @login_required
 # def service_create(request):
 #     """
@@ -454,62 +484,62 @@ class MastersServicesAjaxView(View):
 #             }
 #             return render(request, "core/review_form.html", context)
 
-def get_master_info(request):
-    """
-    Универсальное представление для получения информации о мастере через AJAX.
-    Возвращает данные мастера в формате JSON.
-    """
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        master_id = request.GET.get('master_id')
-        if master_id:
-            try:
-                master = Master.objects.get(pk=master_id)
-                # Формируем данные для ответа
-                master_data = {
-                    'id': master.id,
-                    'name': f"{master.name}",
-                    'experience': master.experience,
-                    'photo': master.photo.url if master.photo else None,
-                    'services': list(master.services.values('id', 'name', 'price')),
-                }
-                return JsonResponse({'success': True, 'master': master_data})
-            except Master.DoesNotExist:
-                return JsonResponse({'success': False, 'error': 'Мастер не найден'})
-        return JsonResponse({'success': False, 'error': 'Не указан ID мастера'})
-    return JsonResponse({'success': False, 'error': 'Недопустимый запрос'})
+# def get_master_info(request):
+#     """
+#     Универсальное представление для получения информации о мастере через AJAX.
+#     Возвращает данные мастера в формате JSON.
+#     """
+#     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+#         master_id = request.GET.get('master_id')
+#         if master_id:
+#             try:
+#                 master = Master.objects.get(pk=master_id)
+#                 # Формируем данные для ответа
+#                 master_data = {
+#                     'id': master.id,
+#                     'name': f"{master.name}",
+#                     'experience': master.experience,
+#                     'photo': master.photo.url if master.photo else None,
+#                     'services': list(master.services.values('id', 'name', 'price')),
+#                 }
+#                 return JsonResponse({'success': True, 'master': master_data})
+#             except Master.DoesNotExist:
+#                 return JsonResponse({'success': False, 'error': 'Мастер не найден'})
+#         return JsonResponse({'success': False, 'error': 'Не указан ID мастера'})
+#     return JsonResponse({'success': False, 'error': 'Недопустимый запрос'})
 
-def masters_services_by_id(request, master_id=None):
-    """
-    Вью для ajax запросов фронтенда, для подгрузки услуг конкретного мастера в форму
-    m2m выбора услуг
-    """
-    # Если master_id не передан в URL, пробуем получить его из POST-запроса
-    if master_id is None:
-        data = json.loads(request.body)
-        master_id = data.get("master_id")
+# def masters_services_by_id(request, master_id=None):
+#     """
+#     Вью для ajax запросов фронтенда, для подгрузки услуг конкретного мастера в форму
+#     m2m выбора услуг
+#     """
+#     # Если master_id не передан в URL, пробуем получить его из POST-запроса
+#     if master_id is None:
+#         data = json.loads(request.body)
+#         master_id = data.get("master_id")
 
-    # Получаем мастера по id
-    master = get_object_or_404(Master, id=master_id)
+#     # Получаем мастера по id
+#     master = get_object_or_404(Master, id=master_id)
 
-    # Получаем услуги
-    services = master.services.all()
+#     # Получаем услуги
+#     services = master.services.all()
 
-    # Формируем ответ в виде JSON
-    response_data = []
+#     # Формируем ответ в виде JSON
+#     response_data = []
 
-    for service in services:
-        # Добавляем в ответ id и название услуги
-        response_data.append(
-            {
-                "id": service.id,
-                "name": service.name,
-            }
-        )
-    # Возвращаем ответ в формате JSON
-    return HttpResponse(
-        json.dumps(response_data, ensure_ascii=False, indent=4),
-        content_type="application/json",
-    )
+#     for service in services:
+#         # Добавляем в ответ id и название услуги
+#         response_data.append(
+#             {
+#                 "id": service.id,
+#                 "name": service.name,
+#             }
+#         )
+#     # Возвращаем ответ в формате JSON
+#     return HttpResponse(
+#         json.dumps(response_data, ensure_ascii=False, indent=4),
+#         content_type="application/json",
+#     )
 
 # def order_create(request):
 #     """

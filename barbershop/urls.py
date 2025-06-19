@@ -27,7 +27,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", LandingPageView.as_view(), name="landing"),
     path("barbershop/", include("core.urls")),
-    path("api/master-info/", get_master_info, name="get_master_info"),
+    # path("api/master-info/", get_master_info, name="get_master_info"),
+    path("api/master-info/", MasterInfoAjaxView.as_view(), name="get_master_info"),
     # path(
     #     "accounts/", include("django.contrib.auth.urls")
     # ),  # Добавлено для поддержки login/logout
