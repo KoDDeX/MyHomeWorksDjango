@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import ServiceForm, ServiceEasyForm
+from django.views import View
 
 # Create your views here.
 # def landing(request):
@@ -369,6 +370,32 @@ class ReviewCreateView(CreateView):
         messages.success(self.request, "Ваш отзыв будет опубликован после модерации!")
         return redirect(self.get_success_url())
 
+
+class MastersServicesAjaxView(View):
+    """
+    AJAX-представление для получения списка услуг мастера.
+    Поддерживает GET и POST запросы. Возвращает данные в формате JSON.
+    """
+    def get(self, request, *args, **kwargs):
+        """Обрабатывает GET-запрос с параметром master_id."""
+        master_id = request.GET.get("master_id")
+        return self.get_services_json_response(master_id)
+
+    def post(self, request, *args, **kwargs):
+        """Обрабатывает POST-запрос с JSON-телом, содержащим master_id."""
+        data = json.loads(request.body)
+        master_id = data.get("master_id")
+        return self.get_services_json_response(master_id)
+
+    def get_services_json_response(self, master_id):
+        """Возвращает JSON-ответ со списком услуг мастера или ошибку."""
+        if not master_id:
+            return JsonResponse({"error": "master_id is required"}, status=400)
+
+        master = get_object_or_404(Master, id=master_id)
+        services = master.services.all()
+        response_data = [{"id": service.id, "name": service.name} for service in services]
+        return JsonResponse(response_data, safe=False)
 
 # @login_required
 # def service_create(request):
