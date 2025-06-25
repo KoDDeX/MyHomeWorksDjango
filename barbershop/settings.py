@@ -168,3 +168,10 @@ LOGOUT_REDIRECT_URL = "/"
 
 TELEGRAM_BOT_API_KEY = os.getenv("TELEGRAM_BOT_API_KEY")
 TELEGRAM_USER_ID = os.getenv("TELEGRAM_USER_ID")
+
+AUTH_USER_MODEL = "users.User"  # Указываем кастомную модель пользователя
+
+AUTHENTICATION_BACKENDS = [
+    'users.backends.EmailOrUsernameModelBackend',  # Ваш кастомный бэкенд
+    'django.contrib.auth.backends.ModelBackend',   # Стандартный бэкенд
+]

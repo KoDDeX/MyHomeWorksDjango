@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import get_user_model
 
+User = get_user_model()
+
 
 class UserLoginForm(AuthenticationForm):
     """
@@ -11,7 +13,7 @@ class UserLoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({
             'class': 'form-control mb-2',
-            'placeholder': 'Имя пользователя'
+            'placeholder': 'Имя пользователя или email'
         })
         self.fields['password'].widget.attrs.update({
             'class': 'form-control',
