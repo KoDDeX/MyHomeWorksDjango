@@ -8,3 +8,5 @@ media/images/services/*
 media/*
 README.md
 *.png
+/HW/*
+/backups/*

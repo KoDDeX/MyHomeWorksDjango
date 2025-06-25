@@ -41,10 +41,12 @@
             <button type="submit" class="btn btn-link nav-item nav-link ms-2 p-0" title="Выйти" style="vertical-align: middle;">
               <i class="bi bi-box-arrow-right"></i>
             </button>
-          </form>
-        {% else %}
-          <a href="{% url 'users:login' %}?next=/" class="nav-link">
+          </form>        {% else %}          <a href="{% url 'users:login' %}?next=/" class="nav-link">
             <i class="bi bi-box-arrow-in-right" title="Вход"></i>
+          </a>
+          <span class="nav-link text-light">|</span>
+          <a href="{% url 'users:register' %}" class="nav-link">
+            <i class="bi bi-person-plus" title="Регистрация"></i>
           </a>
         {% endif %}
       </div>

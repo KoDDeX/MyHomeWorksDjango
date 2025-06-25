@@ -18,6 +18,11 @@ class UserLoginForm(AuthenticationForm):
             'placeholder': 'Пароль'
         })
 
+        # Убираем helptext для полей формы
+        for field_name in ('username', 'password'):
+            if self.fields.get(field_name):
+                self.fields[field_name].help_text = None
+
 class UserRegisterForm(UserCreationForm):
     """
     Кастомная форма для регистрации пользователей
@@ -51,6 +56,12 @@ class UserRegisterForm(UserCreationForm):
             'placeholder': 'Повторите пароль'
         })
 
+        # Убираем helptext для полей формы
+        for field_name in ('username', 'password1', 'password2', 'email'):
+            if self.fields.get(field_name):
+                self.fields[field_name].help_text = None
+
+
     def save(self, commit=True):
         """"
         Переопределяем метод save для корректного сохранения поля email
@@ -60,3 +71,12 @@ class UserRegisterForm(UserCreationForm):
         if commit:
             user.save()
         return user
+    
+    def clean_email(self):
+        """
+        Проверяем уникальность email
+        """
+        email = self.cleaned_data.get('email')
+        if get_user_model().objects.filter(email=email).exists():
+            raise forms.ValidationError("Пользователь с таким email уже существует.")
+        return email
